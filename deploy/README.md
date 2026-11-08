@@ -56,15 +56,17 @@ The iGPU only has low-power VDENC, and the bundled ffmpeg is 7.1:
 
 VAAPI decode falls back to software for streams the GPU cannot decode (10-bit h264 / High 10), whereas `-hwaccel qsv` fails those jobs. `0:V` excludes attached cover pictures.
 
-Library decision maker: "Only transcode videos in these codecs: h264". The original setting ("Don't transcode h264") re-encoded files that were already HEVC. QP 26 measured SSIM 0.990 against a 1080p h264 source at about 10% of its video bitrate, encoding at roughly 7x realtime.
+Both libraries now run the flow in `flows/hevc-qsv-keep-smaller.json` instead of the classic preset: h264 only, VAAPI decode (software fallback for 10-bit), `hevc_qsv -q:v:0 26`, and the original is replaced only when the duration matches (99.5-100.5%) and the output is 15-90% of the original size. Otherwise `setWorkingFile` restores the original. The classic preset had no such guard: a 1.7 Mbps 10-bit h264 source grew from 1.4 GB to 4.9 GB and was auto-accepted. Import the flow with `POST /api/v2/cruddb` (`collection: FlowsJSONDB`, `mode: insert`) and set each library's `flowId`.
+
+Earlier library decision maker: "Only transcode videos in these codecs: h264". The original setting ("Don't transcode h264") re-encoded files that were already HEVC. QP 26 measured SSIM 0.990 against a 1080p h264 source at about 10% of its video bitrate, encoding at roughly 7x realtime.
 
 
 ## UI layer
 
 The proxy injects three same-origin files into `index.html`; the vendor bundle is never modified.
 
-- `private/theme.css`: shadcn/ui-style dark zinc theme over the vendor Bootstrap/MUI/react-table styles, plus table, tab, form and mobile fixes.
-- `private/addon.js`: adds the missing trailing slash to bare routes (`#/flows` rendered blank), resets scroll on navigation, adds an Insights link to the sidebar, marks destructive menu items, hides the Relay/Dedupe/Notifications tools and the "Get Pro" upsells, and replaces locked dashboard widgets with a pointer to Insights.
+- `private/theme.css`: flat dark zinc theme over the vendor Bootstrap/MUI/react-table styles. Page wrappers, sections and layout cells have no borders or backgrounds; only dashboard widgets and setting panels are cards. Also table, tab, form and mobile fixes.
+- `private/addon.js`: adds the missing trailing slash to bare routes (`#/flows` rendered blank), resets scroll on navigation, adds an Insights link to the sidebar, marks destructive menu items, hides the Relay/Dedupe/Notifications tools and the "Get Pro" upsells, removes Pro-locked dashboard widgets (collapsing the grid height) and their orphaned option rows.
 - `private/insights/`: an independent analytics page (`/_private/insights/`) built only from free endpoints: `client/jobs`, `client/search`, `get-nodes` and library names from `cruddb`. It does not call the Pro-gated stats endpoints or read their tables, and no entitlement check is touched. Pro features that need server behaviour (node tags/priority, Relay, Dedupe, Discord notifications, more than five automations) are hidden, not reimplemented.
 
 `/_private/` responses are served with `Cache-Control: no-cache` (Monaco keeps a 7-day expiry), so edits take effect on reload.

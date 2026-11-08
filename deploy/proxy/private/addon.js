@@ -52,34 +52,35 @@
     }
   }
 
-  var LOCKED_TARGETS = [
-    [/job outcomes|verdict/i, "outcomes"],
-    [/space saved/i, "saved"],
-    [/running worker|worker activity|throughput/i, "throughput"],
-    [/stream/i, "composition"]
-  ];
+  var watchedGrids = new WeakSet();
 
-  function replaceLockedWidgets() {
-    var locked = document.querySelectorAll(".dash-widget:not(.t-replaced)");
-    Array.prototype.forEach.call(locked, function (w) {
-      if (!w.querySelector(".dash-locked, .dash-lock-overlay, .history-graphs-blurred")) return;
-      w.classList.add("t-replaced");
-      var titleEl = w.querySelector(".dash-widget-title");
-      var title = titleEl && titleEl.firstChild ? titleEl.firstChild.textContent : "This chart";
-      title = title.split("·")[0];
-      var anchor = "";
-      LOCKED_TARGETS.some(function (t) {
-        if (t[0].test(title)) { anchor = "#" + t[1]; return true; }
-        return false;
+  function removeLockedWidgets() {
+    Array.prototype.forEach.call(document.querySelectorAll(".react-grid-item:not(.t-gone)"), function (item) {
+      if (item.querySelector(".dash-locked, .dash-lock-overlay, .history-graphs-blurred")) item.classList.add("t-gone");
+    });
+    Array.prototype.forEach.call(document.querySelectorAll(".dash-grid"), function (grid) {
+      if (!grid.querySelector(".t-gone")) return;
+      if (!watchedGrids.has(grid)) {
+        watchedGrids.add(grid);
+        new MutationObserver(schedule).observe(grid, { attributes: true, attributeFilter: ["style"] });
+      }
+      var top = grid.getBoundingClientRect().top;
+      var bottom = 0;
+      Array.prototype.forEach.call(grid.children, function (c) {
+        if (c.classList.contains("t-gone") || !c.classList.contains("react-grid-item")) return;
+        bottom = Math.max(bottom, c.getBoundingClientRect().bottom - top);
       });
-      var body = w.querySelector(".dash-widget-body") || w;
-      var note = el("div", "t-locked-note");
-      note.appendChild(el("p", "t-locked-title", title.trim()));
-      note.appendChild(el("p", "t-locked-text", "Shown on the Insights page, built from local job history."));
-      var a = el("a", "t-locked-btn", "Open Insights");
-      a.href = "/_private/insights/" + anchor;
-      note.appendChild(a);
-      body.appendChild(note);
+      var h = Math.ceil(bottom + 10) + "px";
+      if (bottom > 0 && grid.style.height !== h) grid.style.height = h;
+    });
+  }
+
+  function hideOrphanedProRows() {
+    Array.prototype.forEach.call(document.querySelectorAll(".queue-controls-grid > .grid-item:not(.t-hidden)"), function (cell) {
+      if (/^\s*Node priority:?\s*$/i.test(cell.textContent)) {
+        cell.classList.add("t-hidden");
+        if (cell.nextElementSibling) cell.nextElementSibling.classList.add("t-hidden");
+      }
     });
   }
 
@@ -116,15 +117,16 @@
   function sweep() {
     queued = false;
     addInsightsLink();
-    replaceLockedWidgets();
+    removeLockedWidgets();
     hideRelayStub();
+    hideOrphanedProRows();
     markDestructive();
     emptyStates();
   }
   function schedule() {
     if (queued) return;
     queued = true;
-    window.requestAnimationFrame(sweep);
+    window.setTimeout(sweep, 120);
   }
 
   window.addEventListener("hashchange", function () {
@@ -136,6 +138,8 @@
   function start() {
     new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true });
     schedule();
+    // react-grid-layout measures its width before theme.css changes the page padding.
+    window.setTimeout(function () { window.dispatchEvent(new Event("resize")); }, 300);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
   else start();

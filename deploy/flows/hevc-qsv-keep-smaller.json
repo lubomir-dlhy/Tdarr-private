@@ -1,0 +1,214 @@
+{
+  "_id": "hevcQsvKeepSmaller",
+  "name": "HEVC QSV - keep only if smaller",
+  "description": "h264 -> HEVC (Intel QSV, CQP 26). Replaces the original only if duration matches and the output is 15-90% of the original size; otherwise the original is kept.",
+  "categoryFolder": "",
+  "tags": "",
+  "priority": 0,
+  "isUiLocked": false,
+  "flowPlugins": [
+    {
+      "name": "Input File",
+      "sourceRepo": "Community",
+      "pluginName": "inputFile",
+      "version": "1.0.0",
+      "id": "in",
+      "position": {
+        "x": 400,
+        "y": 0
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Is h264?",
+      "sourceRepo": "Community",
+      "pluginName": "checkVideoCodec",
+      "version": "1.0.0",
+      "id": "isH264",
+      "position": {
+        "x": 400,
+        "y": 100
+      },
+      "inputsDB": {
+        "codec": "h264"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Start FFmpeg command",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandStart",
+      "version": "1.0.0",
+      "id": "start",
+      "position": {
+        "x": 400,
+        "y": 200
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "QSV HEVC encode (VAAPI decode, CQP 26)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandCustomArguments",
+      "version": "1.0.0",
+      "id": "args",
+      "position": {
+        "x": 400,
+        "y": 300
+      },
+      "inputsDB": {
+        "inputArguments": "-hwaccel vaapi -hwaccel_device /dev/dri/renderD128",
+        "outputArguments": "-c:v:0 hevc_qsv -q:v:0 26"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Execute",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandExecute",
+      "version": "1.0.0",
+      "id": "exec",
+      "position": {
+        "x": 400,
+        "y": 400
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Duration unchanged?",
+      "sourceRepo": "Community",
+      "pluginName": "compareFileDurationRatio",
+      "version": "1.0.0",
+      "id": "dur",
+      "position": {
+        "x": 400,
+        "y": 500
+      },
+      "inputsDB": {
+        "greaterThan": "99.5",
+        "lessThan": "100.5"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Output 15-90% of original?",
+      "sourceRepo": "Community",
+      "pluginName": "compareFileSizeRatio",
+      "version": "2.0.0",
+      "id": "size",
+      "position": {
+        "x": 400,
+        "y": 600
+      },
+      "inputsDB": {
+        "greaterThan": "15",
+        "lessThan": "90"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Replace Original File",
+      "sourceRepo": "Community",
+      "pluginName": "replaceOriginalFile",
+      "version": "1.0.0",
+      "id": "replace",
+      "position": {
+        "x": 400,
+        "y": 700
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Keep original (discard output)",
+      "sourceRepo": "Community",
+      "pluginName": "setWorkingFile",
+      "version": "1.0.0",
+      "id": "keep",
+      "position": {
+        "x": 750,
+        "y": 700
+      },
+      "inputsDB": {
+        "source": "originalFile",
+        "customPath": ""
+      },
+      "fpEnabled": true
+    }
+  ],
+  "flowEdges": [
+    {
+      "source": "in",
+      "sourceHandle": "1",
+      "target": "isH264",
+      "targetHandle": null,
+      "id": "e1"
+    },
+    {
+      "source": "isH264",
+      "sourceHandle": "1",
+      "target": "start",
+      "targetHandle": null,
+      "id": "e2"
+    },
+    {
+      "source": "start",
+      "sourceHandle": "1",
+      "target": "args",
+      "targetHandle": null,
+      "id": "e3"
+    },
+    {
+      "source": "args",
+      "sourceHandle": "1",
+      "target": "exec",
+      "targetHandle": null,
+      "id": "e4"
+    },
+    {
+      "source": "exec",
+      "sourceHandle": "1",
+      "target": "dur",
+      "targetHandle": null,
+      "id": "e5"
+    },
+    {
+      "source": "dur",
+      "sourceHandle": "1",
+      "target": "size",
+      "targetHandle": null,
+      "id": "e6"
+    },
+    {
+      "source": "dur",
+      "sourceHandle": "2",
+      "target": "keep",
+      "targetHandle": null,
+      "id": "e7"
+    },
+    {
+      "source": "dur",
+      "sourceHandle": "3",
+      "target": "keep",
+      "targetHandle": null,
+      "id": "e8"
+    },
+    {
+      "source": "size",
+      "sourceHandle": "1",
+      "target": "replace",
+      "targetHandle": null,
+      "id": "e9"
+    },
+    {
+      "source": "size",
+      "sourceHandle": "2",
+      "target": "keep",
+      "targetHandle": null,
+      "id": "e10"
+    }
+  ]
+}

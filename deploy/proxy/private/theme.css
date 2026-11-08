@@ -36,16 +36,16 @@ a:hover { color: var(--t-fg); }
 
 /* ---------- Sidebar ---------- */
 .app-sidebar {
-  background: var(--t-bg) !important;
-  border-right: 1px solid var(--t-border) !important;
+  background: #0c0c0e !important;
+  border: 0 !important;
   box-shadow: none !important;
 }
-.sidebar-logo { border-bottom: 1px solid var(--t-border) !important; }
+.sidebar-logo { border: 0 !important; }
 .sidebar-nav { padding: 8px !important; overflow-y: auto; }
 .sidebar-nav-link, .sidebar-sub-nav-link {
   color: var(--t-muted-fg) !important;
   border-radius: calc(var(--t-radius) - 2px) !important;
-  border-left: 0 !important;
+  border: 0 !important;
   margin: 1px 0 !important;
   font-size: 13.5px !important;
   font-weight: 500 !important;
@@ -60,33 +60,61 @@ a:hover { color: var(--t-fg); }
   color: var(--t-fg) !important;
 }
 .sidebar-nav-link.active, .sidebar-sub-nav-link.active {
-  background: var(--t-muted) !important;
+  background: var(--t-accent) !important;
   color: var(--t-fg) !important;
-  box-shadow: inset 2px 0 0 var(--t-brand);
+  box-shadow: none !important;
 }
-.sidebar-nav-link.active svg, .sidebar-sub-nav-link.active svg { color: var(--t-brand) !important; }
-.sidebar-sub-nav { border-left: 1px solid var(--t-border); margin-left: 18px !important; padding-left: 4px !important; }
+.sidebar-nav-link.active svg, .sidebar-sub-nav-link.active svg { color: var(--t-fg) !important; }
+.sidebar-sub-nav { border: 0 !important; margin-left: 12px !important; padding-left: 0 !important; }
 .sidebar-sub-nav-link { font-size: 13px !important; }
-.sidebar-footer { border-top: 1px solid var(--t-border) !important; background: var(--t-bg) !important; }
+.sidebar-footer { border: 0 !important; background: transparent !important; }
 .sidebar-version { color: var(--t-muted-fg) !important; font-size: 12px !important; }
 .sidebar-toggle {
   background: transparent !important;
-  border: 1px solid var(--t-border) !important;
-  border-radius: calc(var(--t-radius) - 2px) !important;
+  border: 0 !important;
   color: var(--t-muted-fg) !important;
 }
 
 /* ---------- Main surfaces ---------- */
-.app-main-content { background: var(--t-bg) !important; }
-.containerGeneral, .dash, .dash-widget, .grid-item, .content-container,
-.libraryContainer, .pluginCard, .card {
+.app-main-content { background: var(--t-bg) !important; overflow-x: hidden; }
+.app-main-content > *, .containerGeneral, .content-container, .dash, .dash-grid { max-width: 100%; box-sizing: border-box !important; }
+
+/* Page wrappers, sections and layout cells are flat; only real widgets are cards. */
+.containerGeneral, .content-container, .libraryContainer, .dash, .grid-item,
+.queue-controls-grid, .scheduleContainer {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: var(--t-fg);
+}
+.containerGeneral { padding: 28px 32px 48px !important; margin: 0 !important; }
+.content-container { width: auto !important; }
+.content-container { position: relative; padding: 0 0 36px !important; margin: 0 !important; }
+.content-container + .content-container {
+  border-top: 1px solid var(--t-border) !important;
+  padding-top: 28px !important;
+}
+.content-container > center { display: block; text-align: left; }
+.section-title, .section-title p {
+  text-align: left !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  letter-spacing: -.02em;
+  color: var(--t-fg) !important;
+  margin: 0 0 12px !important;
+}
+.card-information-button { position: absolute !important; top: 0; right: 0; }
+.content-container + .content-container > .card-information-button { top: 28px; }
+.card-information-button .btn { border: 0 !important; color: var(--t-muted-fg) !important; }
+.grid-item { padding: 6px 0 !important; }
+.dash-widget, .pluginCard, .card {
   background: var(--t-card) !important;
   border: 1px solid var(--t-border) !important;
   border-radius: var(--t-radius) !important;
   box-shadow: none !important;
   color: var(--t-fg);
 }
-.containerGeneral { padding: 16px 20px !important; }
 .dash-widget-header {
   background: transparent !important;
   border-bottom: 1px solid var(--t-border) !important;
@@ -106,11 +134,6 @@ h3 { font-size: 18px !important; }
 hr { border-color: var(--t-border) !important; opacity: 1; }
 p, label, span { color: inherit; }
 
-.containerGeneral .dash, .containerGeneral .containerGeneral {
-  border: 0 !important;
-  background: transparent !important;
-  padding: 0 !important;
-}
 
 /* ---------- Buttons ---------- */
 .btn, .btnStyle, button.btn-outline-light, button.btn-outline-success {
@@ -352,8 +375,6 @@ span[role="button"]:has(> .graph-login-button),
   display: none !important;
 }
 
-.dash-lock-overlay, .dash-widget.t-replaced .history-graphs-blurred { display: none !important; }
-
 /* ---------- Mobile ---------- */
 @media (max-width: 768px) {
   .containerGeneral { padding: 12px !important; }
@@ -367,31 +388,7 @@ span[role="button"]:has(> .graph-login-button),
 .t-hidden { display: none !important; }
 .t-insights-link { display: flex !important; align-items: center; gap: 12px; text-decoration: none !important; padding: 10px 16px; }
 .t-insights-link svg { flex: none; }
-.dash-widget.t-replaced .dash-widget-body > :not(.t-locked-note) { display: none !important; }
-.t-locked-note {
-  height: 100%;
-  min-height: 140px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  text-align: center;
-  padding: 16px;
-}
-.t-locked-title { margin: 0; font-weight: 600; color: var(--t-fg); }
-.t-locked-text { margin: 0; color: var(--t-muted-fg); font-size: 13px; }
-.t-locked-btn {
-  margin-top: 6px;
-  padding: 6px 12px;
-  border: 1px solid var(--t-border);
-  border-radius: calc(var(--t-radius) - 2px);
-  color: var(--t-fg) !important;
-  font-size: 13px;
-  font-weight: 500;
-  text-decoration: none !important;
-}
-.t-locked-btn:hover { background: var(--t-accent); }
+.react-grid-item.t-gone { display: none !important; }
 .t-destructive { color: #f87171 !important; }
 .btn.t-destructive, button.t-destructive { border-color: #7f1d1d !important; }
 .t-releases-note { color: var(--t-muted-fg); font-size: 13px; margin-top: 12px; }
