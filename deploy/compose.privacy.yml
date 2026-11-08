@@ -5,21 +5,32 @@ services:
     image: ghcr.io/haveagitgat/tdarr@sha256:0880fd036a4ac6ef8a2fef2a7b8ddedf5d0898c9ee1a495580356dc922f54d62
     networks:
       - tdarr_internal
+  tdarr-node:
+    image: ghcr.io/haveagitgat/tdarr_node@sha256:37516a2af827cb0b0e39050ee72f474d17645b81228afabd030c02c861dff7ad
+    networks:
+      - tdarr_internal
+  tdarr-proxy:
+    image: nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
+    container_name: tdarr-proxy
+    volumes:
+      - ./proxy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./proxy/private:/srv/private:ro
+    networks:
+      - tdarr_internal
+    depends_on:
+      - tdarr-server
+    restart: unless-stopped
     labels:
       pangolin.public-resources.tdarr.name: Tdarr
       pangolin.public-resources.tdarr.protocol: http
       pangolin.public-resources.tdarr.full-domain: tdarr.lubomirdlhy.sk
       pangolin.public-resources.tdarr.auth.sso-enabled: "true"
       pangolin.public-resources.tdarr.targets[0].method: http
-      pangolin.public-resources.tdarr.targets[0].hostname: tdarr-server
-      pangolin.public-resources.tdarr.targets[0].port: "8265"
-      pangolin.public-resources.tdarr.targets[0].healthcheck.hostname: tdarr-server
-      pangolin.public-resources.tdarr.targets[0].healthcheck.port: "8265"
-      pangolin.public-resources.tdarr.targets[0].healthcheck.path: /
-  tdarr-node:
-    image: ghcr.io/haveagitgat/tdarr_node@sha256:37516a2af827cb0b0e39050ee72f474d17645b81228afabd030c02c861dff7ad
-    networks:
-      - tdarr_internal
+      pangolin.public-resources.tdarr.targets[0].hostname: tdarr-proxy
+      pangolin.public-resources.tdarr.targets[0].port: "8080"
+      pangolin.public-resources.tdarr.targets[0].healthcheck.hostname: tdarr-proxy
+      pangolin.public-resources.tdarr.targets[0].healthcheck.port: "8080"
+      pangolin.public-resources.tdarr.targets[0].healthcheck.path: /healthz
 networks:
   tdarr_internal:
     external: true
