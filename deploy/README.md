@@ -25,7 +25,7 @@ The Tdarr EULA prohibits reverse engineering, redistribution, and bypassing subs
 2. Install the self-hosted Monaco build next to the proxy config (verifies the npm integrity hash):
 
    ```sh
-   mkdir -p proxy/private && cp deploy/proxy/nginx.conf proxy/ && cp deploy/proxy/monaco-preload.js proxy/private/
+   mkdir -p proxy && cp deploy/proxy/nginx.conf deploy/proxy/security-headers.conf proxy/ && cp -R deploy/proxy/private proxy/
    sh deploy/proxy/fetch-monaco.sh proxy/private
    ```
 
@@ -51,7 +51,20 @@ The iGPU only has low-power VDENC, and the bundled ffmpeg is 7.1:
 - The library cache must be a path that both server and node see: `/media/.tdarr-cache`.
 
 ```text
--hwaccel qsv -hwaccel_output_format qsv<io>-map 0:V -map 0:a? -map 0:s? -map 0:t? -map_metadata 0 -c:v hevc_qsv -q:v 26 -c:a copy -c:s copy
+-hwaccel vaapi -hwaccel_device /dev/dri/renderD128<io>-map 0:V -map 0:a? -map 0:s? -map 0:t? -map_metadata 0 -c:v hevc_qsv -q:v 26 -c:a copy -c:s copy
 ```
 
-`0:V` excludes attached cover pictures, which QSV cannot decode. QP 26 measured SSIM 0.990 against a 1080p h264 source at about 10% of its video bitrate, encoding at roughly 7x realtime.
+VAAPI decode falls back to software for streams the GPU cannot decode (10-bit h264 / High 10), whereas `-hwaccel qsv` fails those jobs. `0:V` excludes attached cover pictures.
+
+Library decision maker: "Only transcode videos in these codecs: h264". The original setting ("Don't transcode h264") re-encoded files that were already HEVC. QP 26 measured SSIM 0.990 against a 1080p h264 source at about 10% of its video bitrate, encoding at roughly 7x realtime.
+
+
+## UI layer
+
+The proxy injects three same-origin files into `index.html`; the vendor bundle is never modified.
+
+- `private/theme.css`: shadcn/ui-style dark zinc theme over the vendor Bootstrap/MUI/react-table styles, plus table, tab, form and mobile fixes.
+- `private/addon.js`: adds the missing trailing slash to bare routes (`#/flows` rendered blank), resets scroll on navigation, adds an Insights link to the sidebar, marks destructive menu items, hides the Relay/Dedupe/Notifications tools and the "Get Pro" upsells, and replaces locked dashboard widgets with a pointer to Insights.
+- `private/insights/`: an independent analytics page (`/_private/insights/`) built only from free endpoints: `client/jobs`, `client/search`, `get-nodes` and library names from `cruddb`. It does not call the Pro-gated stats endpoints or read their tables, and no entitlement check is touched. Pro features that need server behaviour (node tags/priority, Relay, Dedupe, Discord notifications, more than five automations) are hidden, not reimplemented.
+
+`/_private/` responses are served with `Cache-Control: no-cache` (Monaco keeps a 7-day expiry), so edits take effect on reload.

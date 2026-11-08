@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Insights · Tdarr</title>
+  <link rel="stylesheet" href="insights.css?v=2">
+</head>
+<body>
+  <nav class="topbar">
+    <a class="back" href="/#/">&larr; Back to Tdarr</a>
+    <span class="topbar-sep" aria-hidden="true">/</span>
+    <span class="topbar-title">Insights</span>
+  </nav>
+
+  <main class="page">
+    <header class="page-header">
+      <div>
+        <h1>Insights</h1>
+        <p class="muted" id="status-line">Loading…</p>
+      </div>
+      <div class="controls">
+        <div class="segmented" role="radiogroup" aria-label="Time range" id="range">
+          <button type="button" role="radio" data-range="24h">24h</button>
+          <button type="button" role="radio" data-range="7d">7d</button>
+          <button type="button" role="radio" data-range="30d">30d</button>
+          <button type="button" role="radio" data-range="all">All</button>
+        </div>
+        <button type="button" class="btn" id="refresh" aria-label="Refresh now">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+          <span>Refresh</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="alert" id="error" hidden></div>
+
+    <section class="kpis" id="kpis" aria-label="Key figures"></section>
+
+    <section class="grid">
+      <article class="card span-2">
+        <header class="card-header">
+          <div>
+            <h2>Live workers</h2>
+            <p class="muted">Active workers reported by each node · refreshes every 15s</p>
+          </div>
+        </header>
+        <div class="card-body" id="workers"></div>
+      </article>
+
+      <article class="card span-2">
+        <header class="card-header">
+          <div>
+            <h2>Queue ETA</h2>
+            <p class="muted">Estimate only: queued h264 GB × observed seconds per GB ÷ transcode slots</p>
+          </div>
+        </header>
+        <div class="card-body" id="eta"></div>
+      </article>
+
+      <article class="card span-4">
+        <header class="card-header">
+          <div>
+            <h2>Job outcomes</h2>
+            <p class="muted" id="outcomes-desc">Completed jobs by status</p>
+          </div>
+          <div class="segmented small" role="radiogroup" aria-label="Job type" id="jobtype">
+            <button type="button" role="radio" data-type="transcode">Transcode</button>
+            <button type="button" role="radio" data-type="healthcheck">Health check</button>
+          </div>
+        </header>
+        <div class="card-body">
+          <div class="chart" id="chart-outcomes"></div>
+          <div class="legend" id="legend-outcomes"></div>
+        </div>
+      </article>
+
+      <article class="card span-2">
+        <header class="card-header">
+          <div>
+            <h2>Space saved</h2>
+            <p class="muted" id="saved-desc">Cumulative size reduction from successful transcodes</p>
+          </div>
+        </header>
+        <div class="card-body"><div class="chart" id="chart-saved"></div></div>
+      </article>
+
+      <article class="card span-2">
+        <header class="card-header">
+          <div>
+            <h2>Throughput</h2>
+            <p class="muted" id="throughput-desc">Jobs completed and GB transcoded</p>
+          </div>
+        </header>
+        <div class="card-body">
+          <div class="chart" id="chart-throughput"></div>
+          <div class="legend" id="legend-throughput"></div>
+        </div>
+      </article>
+
+      <article class="card span-2">
+        <header class="card-header">
+          <div>
+            <h2>Job duration</h2>
+            <p class="muted">Wall-clock time per completed job</p>
+          </div>
+        </header>
+        <div class="card-body flush" id="durations"></div>
+      </article>
+
+      <article class="card span-2">
+        <header class="card-header">
+          <div>
+            <h2>Size after transcode</h2>
+            <p class="muted">Output size as a share of the original, successful transcodes</p>
+          </div>
+        </header>
+        <div class="card-body"><div class="chart" id="chart-ratio"></div></div>
+      </article>
+
+      <article class="card span-2">
+        <header class="card-header">
+          <div>
+            <h2>Biggest savings</h2>
+            <p class="muted">Top 10 successful transcodes by GB saved</p>
+          </div>
+        </header>
+        <div class="card-body flush" id="top-saved"></div>
+      </article>
+
+      <article class="card span-2">
+        <header class="card-header">
+          <div>
+            <h2>Files that grew</h2>
+            <p class="muted">Top 10 successful transcodes whose output was larger</p>
+          </div>
+        </header>
+        <div class="card-body flush" id="top-grew"></div>
+      </article>
+
+      <article class="card span-4">
+        <header class="card-header">
+          <div>
+            <h2>Recent failures</h2>
+            <p class="muted">Errored and cancelled jobs, newest first</p>
+          </div>
+        </header>
+        <div class="card-body flush" id="failures"></div>
+      </article>
+
+      <article class="card span-4">
+        <header class="card-header">
+          <div>
+            <h2>Libraries</h2>
+            <p class="muted">File counts are current; job columns follow the selected range</p>
+          </div>
+        </header>
+        <div class="card-body flush" id="libraries"></div>
+      </article>
+
+      <article class="card span-4">
+        <header class="card-header">
+          <div>
+            <h2>Nodes</h2>
+            <p class="muted">Job columns follow the selected range</p>
+          </div>
+        </header>
+        <div class="card-body flush" id="nodes"></div>
+      </article>
+
+      <article class="card span-4">
+        <header class="card-header">
+          <div>
+            <h2>Library composition</h2>
+            <p class="muted" id="composition-desc">Current state of all scanned files</p>
+          </div>
+        </header>
+        <div class="card-body composition">
+          <section><h3>Video codec</h3><div id="comp-codec"></div></section>
+          <section><h3>Resolution</h3><div id="comp-res"></div></section>
+          <section><h3>Container</h3><div id="comp-container"></div></section>
+          <section><h3>Audio languages</h3><p class="hint">Files with at least one audio track</p><div id="comp-audio"></div></section>
+          <section><h3>Subtitle languages</h3><p class="hint">Files with at least one subtitle track</p><div id="comp-subs"></div></section>
+          <section><h3>Health check</h3><div id="comp-health"></div></section>
+        </div>
+      </article>
+    </section>
+
+    <footer class="page-footer muted">
+      Built from Tdarr's free job history, file search and node APIs. Times are shown in your local time zone.
+    </footer>
+  </main>
+
+  <div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+  <script src="insights.js?v=2"></script>
+</body>
+</html>

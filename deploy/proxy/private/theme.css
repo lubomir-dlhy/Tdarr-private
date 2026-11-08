@@ -1,0 +1,400 @@
+/* shadcn/ui-style dark zinc theme for the Tdarr UI. Loaded after the vendor CSS. */
+:root {
+  --inputBackgroundColor: #27272a;
+  --t-bg: #09090b;
+  --t-card: #0f0f12;
+  --t-muted: #18181b;
+  --t-accent: #1f1f23;
+  --t-border: #27272a;
+  --t-input: #27272a;
+  --t-fg: #fafafa;
+  --t-muted-fg: #a1a1aa;
+  --t-primary: #fafafa;
+  --t-primary-fg: #18181b;
+  --t-ring: #52525b;
+  --t-brand: #8b5cf6;
+  --t-destructive: #ef4444;
+  --t-success: #22c55e;
+  --t-radius: 0.5rem;
+  --t-font: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --t-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  color-scheme: dark;
+}
+
+html, body, #root, .app-layout {
+  background: var(--t-bg) !important;
+  color: var(--t-fg);
+  font-family: var(--t-font) !important;
+  -webkit-font-smoothing: antialiased;
+}
+body { font-size: 14px; }
+code, pre, kbd, samp { font-family: var(--t-mono) !important; }
+::selection { background: rgba(139, 92, 246, .35); }
+* { scrollbar-color: #3f3f46 transparent; scrollbar-width: thin; }
+a { color: var(--t-fg); text-underline-offset: 3px; }
+a:hover { color: var(--t-fg); }
+
+/* ---------- Sidebar ---------- */
+.app-sidebar {
+  background: var(--t-bg) !important;
+  border-right: 1px solid var(--t-border) !important;
+  box-shadow: none !important;
+}
+.sidebar-logo { border-bottom: 1px solid var(--t-border) !important; }
+.sidebar-nav { padding: 8px !important; overflow-y: auto; }
+.sidebar-nav-link, .sidebar-sub-nav-link {
+  color: var(--t-muted-fg) !important;
+  border-radius: calc(var(--t-radius) - 2px) !important;
+  border-left: 0 !important;
+  margin: 1px 0 !important;
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+  padding-right: 8px !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background-color .15s, color .15s;
+}
+.sidebar-nav-link:hover, .sidebar-sub-nav-link:hover {
+  background: var(--t-accent) !important;
+  color: var(--t-fg) !important;
+}
+.sidebar-nav-link.active, .sidebar-sub-nav-link.active {
+  background: var(--t-muted) !important;
+  color: var(--t-fg) !important;
+  box-shadow: inset 2px 0 0 var(--t-brand);
+}
+.sidebar-nav-link.active svg, .sidebar-sub-nav-link.active svg { color: var(--t-brand) !important; }
+.sidebar-sub-nav { border-left: 1px solid var(--t-border); margin-left: 18px !important; padding-left: 4px !important; }
+.sidebar-sub-nav-link { font-size: 13px !important; }
+.sidebar-footer { border-top: 1px solid var(--t-border) !important; background: var(--t-bg) !important; }
+.sidebar-version { color: var(--t-muted-fg) !important; font-size: 12px !important; }
+.sidebar-toggle {
+  background: transparent !important;
+  border: 1px solid var(--t-border) !important;
+  border-radius: calc(var(--t-radius) - 2px) !important;
+  color: var(--t-muted-fg) !important;
+}
+
+/* ---------- Main surfaces ---------- */
+.app-main-content { background: var(--t-bg) !important; }
+.containerGeneral, .dash, .dash-widget, .grid-item, .content-container,
+.libraryContainer, .pluginCard, .card {
+  background: var(--t-card) !important;
+  border: 1px solid var(--t-border) !important;
+  border-radius: var(--t-radius) !important;
+  box-shadow: none !important;
+  color: var(--t-fg);
+}
+.containerGeneral { padding: 16px 20px !important; }
+.dash-widget-header {
+  background: transparent !important;
+  border-bottom: 1px solid var(--t-border) !important;
+}
+.dash-widget-title { color: var(--t-fg) !important; font-weight: 600 !important; letter-spacing: -.01em; }
+.dash-widget-header *:not(.dash-widget-title) { color: var(--t-muted-fg); }
+.dash-toolbar { color: var(--t-muted-fg) !important; }
+.dash-queue-count-value, .dash-big-number-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700 !important;
+  letter-spacing: -.02em;
+}
+h1, h2, h3, h4, h5 { color: var(--t-fg); letter-spacing: -.02em; font-weight: 600; }
+h1 { font-size: 24px !important; }
+h2 { font-size: 20px !important; }
+h3 { font-size: 18px !important; }
+hr { border-color: var(--t-border) !important; opacity: 1; }
+p, label, span { color: inherit; }
+
+.containerGeneral .dash, .containerGeneral .containerGeneral {
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+/* ---------- Buttons ---------- */
+.btn, .btnStyle, button.btn-outline-light, button.btn-outline-success {
+  border-radius: calc(var(--t-radius) - 2px) !important;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+  box-shadow: none !important;
+  transition: background-color .15s, border-color .15s, color .15s;
+}
+.btn-outline-light, .btnStyle, .btn-secondary, .btn-dark, .btn-light {
+  background: transparent !important;
+  border: 1px solid var(--t-border) !important;
+  color: var(--t-fg) !important;
+}
+.btn-outline-light:hover, .btnStyle:hover, .btn-secondary:hover, .btn-dark:hover, .btn-light:hover {
+  background: var(--t-accent) !important;
+}
+.btn-primary, .btn-info {
+  background: var(--t-primary) !important;
+  border: 1px solid var(--t-primary) !important;
+  color: var(--t-primary-fg) !important;
+}
+.btn-primary:hover, .btn-info:hover { background: #e4e4e7 !important; }
+.btn-outline-success, .btn-success {
+  background: transparent !important;
+  border: 1px solid #166534 !important;
+  color: #4ade80 !important;
+}
+.btn-outline-success:hover, .btn-success:hover { background: rgba(34, 197, 94, .1) !important; }
+.btn-danger, .btn-outline-danger {
+  background: transparent !important;
+  border: 1px solid #7f1d1d !important;
+  color: #f87171 !important;
+}
+.btn-danger:hover, .btn-outline-danger:hover { background: rgba(239, 68, 68, .12) !important; }
+.btn:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--t-ring) !important;
+  outline-offset: 2px;
+}
+
+/* ---------- Dropdowns, menus, toasts ---------- */
+.dropdown-menu {
+  background: var(--t-card) !important;
+  border: 1px solid var(--t-border) !important;
+  border-radius: var(--t-radius) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .5) !important;
+  padding: 4px !important;
+}
+.dropdown-item {
+  color: var(--t-fg) !important;
+  border-radius: calc(var(--t-radius) - 2px);
+  font-size: 13px;
+}
+.dropdown-item:hover, .dropdown-item:focus { background: var(--t-accent) !important; }
+.dropdown-item[class*="delete" i], .dropdown-item[class*="clear" i] { color: #f87171 !important; }
+.Toastify__toast {
+  background: var(--t-card) !important;
+  color: var(--t-fg) !important;
+  border: 1px solid var(--t-border);
+  border-radius: var(--t-radius) !important;
+  font-family: var(--t-font) !important;
+}
+
+/* ---------- Tabs ---------- */
+.react-tabs__tab-list {
+  display: inline-flex !important;
+  flex-wrap: wrap;
+  gap: 2px;
+  background: var(--t-muted) !important;
+  border: 0 !important;
+  border-radius: var(--t-radius) !important;
+  padding: 4px !important;
+}
+.react-tabs__tab {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: calc(var(--t-radius) - 2px) !important;
+  color: var(--t-muted-fg) !important;
+  font-weight: 500;
+  font-size: 13px;
+  padding: 6px 12px !important;
+  bottom: 0 !important;
+}
+.react-tabs__tab:hover { color: var(--t-fg) !important; }
+.react-tabs__tab--selected {
+  background: var(--t-bg) !important;
+  color: var(--t-fg) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .4), inset 0 0 0 1px var(--t-border);
+}
+.react-tabs__tab:focus:after { display: none !important; }
+
+/* ---------- Forms ---------- */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+select, textarea, .MuiOutlinedInput-root, [class$="-control"] {
+  background: transparent !important;
+  color: var(--t-fg) !important;
+  border-color: var(--t-input) !important;
+  border-radius: calc(var(--t-radius) - 2px) !important;
+  font-family: var(--t-font) !important;
+}
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea {
+  border: 1px solid var(--t-input) !important;
+}
+select option { background: var(--t-card); color: var(--t-fg); }
+input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(.8); }
+.MuiOutlinedInput-notchedOutline { border-color: var(--t-input) !important; }
+.MuiInputBase-input { color: var(--t-fg) !important; }
+.MuiFormHelperText-root, .MuiInputLabel-root { color: var(--t-muted-fg) !important; }
+[class$="-menu"] { background: var(--t-card) !important; border: 1px solid var(--t-border); }
+[class$="-option"] { background: transparent !important; color: var(--t-fg) !important; }
+[class$="-option"]:hover { background: var(--t-accent) !important; }
+[class$="-singleValue"], [class$="-placeholder"] { color: var(--t-fg) !important; }
+.MuiSwitch-track { background-color: #3f3f46 !important; opacity: 1 !important; }
+.MuiSwitch-thumb { background-color: var(--t-fg) !important; box-shadow: none !important; }
+.Mui-checked + .MuiSwitch-track { background-color: var(--t-brand) !important; }
+.MuiCheckbox-root, .MuiRadio-root { color: #71717a !important; }
+.MuiCheckbox-root.Mui-checked, .MuiRadio-root.Mui-checked { color: var(--t-brand) !important; }
+.MuiSlider-root { color: var(--t-brand) !important; }
+.MuiSlider-markLabel { color: var(--t-muted-fg) !important; font-size: 11px !important; }
+.MuiSlider-markLabel:nth-of-type(4n+2) { visibility: hidden; }
+.MuiSlider-markLabel[data-index="0"], .MuiSlider-markLabel:last-of-type { visibility: visible; }
+.MuiSlider-valueLabel { background: var(--t-primary) !important; color: var(--t-primary-fg) !important; }
+
+/* ---------- Tables (react-table v6) ---------- */
+.ReactTable {
+  border: 1px solid var(--t-border) !important;
+  border-radius: var(--t-radius) !important;
+  background: var(--t-card) !important;
+  max-width: 100%;
+  overflow: hidden;
+}
+.ReactTable .rt-table { overflow-x: auto !important; }
+.ReactTable .rt-thead.-header {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-bottom: 1px solid var(--t-border) !important;
+}
+.ReactTable .rt-th, .ReactTable .rt-thead .rt-th, .pluginTableHeader {
+  color: var(--t-muted-fg) !important;
+  font-weight: 500 !important;
+  font-size: 12px !important;
+  border-right: 0 !important;
+}
+.ReactTable .rt-thead.-filters { border-bottom: 1px solid var(--t-border) !important; }
+.ReactTable .rt-thead.-filters input, .ReactTable .rt-thead.-filters select {
+  background: var(--t-bg) !important;
+  color: var(--t-fg) !important;
+  border: 1px solid var(--t-input) !important;
+  height: 28px;
+}
+.ReactTable .rt-tbody .rt-tr-group { border-bottom: 1px solid var(--t-border) !important; }
+.ReactTable .rt-tbody .rt-td { border-right: 0 !important; color: var(--t-fg); }
+.ReactTable .rt-tr.-odd, .ReactTable .rt-tr.-even { background: transparent !important; }
+.ReactTable .rt-tbody .rt-tr:not(.-padRow):hover { background: var(--t-muted) !important; }
+.ReactTable .rt-tr.-padRow { display: none !important; }
+.ReactTable .rt-td > p, .ReactTable .rt-td .file-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0;
+}
+.ReactTable .rt-td table { border-color: var(--t-border) !important; }
+.ReactTable .rt-td table td, .ReactTable .rt-td table th { border-color: var(--t-border) !important; }
+.ReactTable .rt-td:has(table) { max-height: 180px; overflow-y: auto !important; align-items: flex-start; }
+.ReactTable .rt-noData {
+  background: transparent !important;
+  color: var(--t-muted-fg) !important;
+  font-size: 13px;
+}
+.ReactTable .-pagination {
+  border-top: 1px solid var(--t-border) !important;
+  box-shadow: none !important;
+  color: var(--t-muted-fg);
+}
+.ReactTable .-pagination .-btn {
+  background: transparent !important;
+  border: 1px solid var(--t-border) !important;
+  border-radius: calc(var(--t-radius) - 2px) !important;
+  color: var(--t-fg) !important;
+}
+.ReactTable .-pagination .-btn:not([disabled]):hover { background: var(--t-accent) !important; }
+.ReactTable .-pagination .-btn[disabled] { opacity: .4; }
+.ReactTable .-pagination input, .ReactTable .-pagination select {
+  background: var(--t-bg) !important;
+  color: var(--t-fg) !important;
+  border: 1px solid var(--t-input) !important;
+}
+.ReactTable .rt-table[style*="gradient"] { background: transparent !important; }
+.streamsTable { border-collapse: collapse; width: 100%; }
+.streamsTable td, .streamsTable th {
+  color: var(--t-muted-fg) !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--t-border) !important;
+  padding: 1px 6px !important;
+  font-size: 12px;
+}
+.streamsTable p { margin: 0; color: inherit !important; }
+.ReactTable .rt-td:has(.streamsTable) { max-height: 120px; }
+
+/* ---------- Charts ---------- */
+.recharts-cartesian-axis-tick text, .recharts-text, .recharts-legend-item-text {
+  fill: var(--t-muted-fg) !important;
+  color: var(--t-muted-fg) !important;
+  font-size: 11px;
+}
+.recharts-cartesian-grid line { stroke: var(--t-border) !important; }
+.recharts-default-tooltip {
+  background: var(--t-card) !important;
+  border: 1px solid var(--t-border) !important;
+  border-radius: var(--t-radius);
+}
+.recharts-pie-label-text { fill: var(--t-fg) !important; }
+
+/* ---------- Page specifics ---------- */
+.scheduleContainer { overflow-x: auto; }
+.workerItemsGrid { overflow-x: auto; }
+.pluginCard, [class*="pluginCard"] { padding: 12px !important; }
+.pie-grid > * { background: var(--t-card) !important; border-color: var(--t-border) !important; }
+.app-main-content [style*="background-color: rgb(160, 160, 160)"],
+.app-main-content [style*="background: rgb(160, 160, 160)"] {
+  background: var(--t-muted) !important;
+  color: var(--t-fg) !important;
+}
+[class*="hero"], [class*="Hero"] { background: var(--t-card) !important; border: 1px solid var(--t-border); border-radius: var(--t-radius); }
+
+/* ---------- Pro upsells: features stay locked, the nags are hidden ---------- */
+.sidebar-login,
+.tdarr-modal-back:has(.pro-notice),
+span[role="button"]:has(> .pro-login-icon-small),
+span[role="button"]:has(> .pro-login-icon-medium),
+span[role="button"]:has(> .graph-login-button),
+.graph-login-button, .pro-login-icon-small, .pro-login-icon-medium,
+.dash-pro-badge, .dash-inline-lock,
+.dash-catalog-card:has(.dash-pro-badge),
+#worker-verdict:has(.history-graphs-blurred),
+#running-workers:has(.history-graphs-blurred),
+.stream-stats-container:has(.history-graphs-blurred),
+.content-container:has(> .history-graphs-blurred) {
+  display: none !important;
+}
+
+.dash-lock-overlay, .dash-widget.t-replaced .history-graphs-blurred { display: none !important; }
+
+/* ---------- Mobile ---------- */
+@media (max-width: 768px) {
+  .containerGeneral { padding: 12px !important; }
+  .react-tabs__tab-list { display: flex !important; overflow-x: auto; flex-wrap: nowrap; }
+  .t-insights-link { flex-direction: column; justify-content: center; gap: 4px; padding: 6px 10px; }
+  .t-insights-label { font-size: 11px; line-height: 1; }
+  .sidebar-nav { scroll-snap-type: x proximity; mask-image: linear-gradient(to right, #000 85%, transparent); }
+}
+
+/* ---------- Add-on elements (addon.js) ---------- */
+.t-hidden { display: none !important; }
+.t-insights-link { display: flex !important; align-items: center; gap: 12px; text-decoration: none !important; padding: 10px 16px; }
+.t-insights-link svg { flex: none; }
+.dash-widget.t-replaced .dash-widget-body > :not(.t-locked-note) { display: none !important; }
+.t-locked-note {
+  height: 100%;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+  padding: 16px;
+}
+.t-locked-title { margin: 0; font-weight: 600; color: var(--t-fg); }
+.t-locked-text { margin: 0; color: var(--t-muted-fg); font-size: 13px; }
+.t-locked-btn {
+  margin-top: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--t-border);
+  border-radius: calc(var(--t-radius) - 2px);
+  color: var(--t-fg) !important;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none !important;
+}
+.t-locked-btn:hover { background: var(--t-accent); }
+.t-destructive { color: #f87171 !important; }
+.btn.t-destructive, button.t-destructive { border-color: #7f1d1d !important; }
+.t-releases-note { color: var(--t-muted-fg); font-size: 13px; margin-top: 12px; }
+a.sidebar-sub-nav-link[href*="tools/tdarr-relay"],
+a.sidebar-sub-nav-link[href*="tools/dedupe"],
+a.sidebar-sub-nav-link[href*="tools/notifications"] { display: none !important; }
