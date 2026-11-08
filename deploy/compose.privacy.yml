@@ -1,0 +1,26 @@
+# Overlay for the homelab Tdarr deployment.
+# Create tdarr_internal with: docker network create --internal tdarr_internal
+services:
+  tdarr-server:
+    image: ghcr.io/haveagitgat/tdarr@sha256:0880fd036a4ac6ef8a2fef2a7b8ddedf5d0898c9ee1a495580356dc922f54d62
+    networks:
+      - tdarr_internal
+    labels:
+      pangolin.public-resources.tdarr.name: Tdarr
+      pangolin.public-resources.tdarr.protocol: http
+      pangolin.public-resources.tdarr.full-domain: tdarr.lubomirdlhy.sk
+      pangolin.public-resources.tdarr.auth.sso-enabled: "true"
+      pangolin.public-resources.tdarr.targets[0].method: http
+      pangolin.public-resources.tdarr.targets[0].hostname: tdarr-server
+      pangolin.public-resources.tdarr.targets[0].port: "8265"
+      pangolin.public-resources.tdarr.targets[0].healthcheck.hostname: tdarr-server
+      pangolin.public-resources.tdarr.targets[0].healthcheck.port: "8265"
+      pangolin.public-resources.tdarr.targets[0].healthcheck.path: /
+  tdarr-node:
+    image: ghcr.io/haveagitgat/tdarr_node@sha256:37516a2af827cb0b0e39050ee72f474d17645b81228afabd030c02c861dff7ad
+    networks:
+      - tdarr_internal
+networks:
+  tdarr_internal:
+    external: true
+    name: tdarr_internal
