@@ -379,15 +379,11 @@ span[role="button"]:has(> .graph-login-button),
 @media (max-width: 768px) {
   .containerGeneral { padding: 12px !important; }
   .react-tabs__tab-list { display: flex !important; overflow-x: auto; flex-wrap: nowrap; }
-  .t-insights-link { flex-direction: column; justify-content: center; gap: 4px; padding: 6px 10px; }
-  .t-insights-label { font-size: 11px; line-height: 1; }
   .sidebar-nav { scroll-snap-type: x proximity; mask-image: linear-gradient(to right, #000 85%, transparent); }
 }
 
 /* ---------- Add-on elements (addon.js) ---------- */
 .t-hidden { display: none !important; }
-.t-insights-link { display: flex !important; align-items: center; gap: 12px; text-decoration: none !important; padding: 10px 16px; }
-.t-insights-link svg { flex: none; }
 .react-grid-item.t-gone { display: none !important; }
 .t-destructive { color: #f87171 !important; }
 .btn.t-destructive, button.t-destructive { border-color: #7f1d1d !important; }
@@ -400,3 +396,8 @@ a.sidebar-sub-nav-link[href*="tools/notifications"] { display: none !important; 
 .app-main-content > div:not(.containerGeneral):not(:has(> .containerGeneral)) { padding: 20px 32px 48px; box-sizing: border-box; }
 .pie-stats-group { background: transparent !important; border: 0 !important; padding: 8px 0 !important; }
 .pie-stats-group + .pie-stats-group { border-top: 1px solid var(--t-border) !important; }
+
+@media (min-width: 769px) {
+  .app-sidebar:not(.collapsed) { min-width: 196px !important; width: 196px !important; }
+  .app-sidebar:not(.collapsed) ~ .app-main-content { left: 196px !important; }
+}
