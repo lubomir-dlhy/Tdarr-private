@@ -395,3 +395,8 @@ span[role="button"]:has(> .graph-login-button),
 a.sidebar-sub-nav-link[href*="tools/tdarr-relay"],
 a.sidebar-sub-nav-link[href*="tools/dedupe"],
 a.sidebar-sub-nav-link[href*="tools/notifications"] { display: none !important; }
+
+/* Pages without .containerGeneral (Stats) get the same gutter; pie groups are not nested cards. */
+.app-main-content > div:not(.containerGeneral):not(:has(> .containerGeneral)) { padding: 20px 32px 48px; box-sizing: border-box; }
+.pie-stats-group { background: transparent !important; border: 0 !important; padding: 8px 0 !important; }
+.pie-stats-group + .pie-stats-group { border-top: 1px solid var(--t-border) !important; }
